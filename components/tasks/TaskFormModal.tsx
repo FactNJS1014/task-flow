@@ -8,7 +8,6 @@ export function TaskFormModal({
   onSuccess,
   initialData,
 }: any) {
-  // ฟังก์ชันช่วยแปลงรูปแบบ Date เป็น YYYY-MM-DDTHH:mm
   const formatDateTimeLocal = (dateStr?: string) => {
     const d = dateStr ? new Date(dateStr) : new Date();
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -18,7 +17,7 @@ export function TaskFormModal({
   const defaultFormData = {
     title: "",
     description: "",
-    category: "Work",
+    category: "Work", // ค่าเริ่มต้นเป็น Work
     priority: "MEDIUM",
     status: "TODO",
     dueDate: formatDateTimeLocal(),
@@ -28,7 +27,6 @@ export function TaskFormModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // 📌 รีเซ็ตค่า Form ทุกครั้งที่ Modal ถูกเปิดขึ้นมา
   useEffect(() => {
     if (isOpen) {
       setError("");
@@ -42,15 +40,7 @@ export function TaskFormModal({
           dueDate: formatDateTimeLocal(initialData.dueDate),
         });
       } else {
-        // ล้างค่าเป็น Default สำหรับ Create Task ใหม่
-        setFormData({
-          title: "",
-          description: "",
-          category: "Work",
-          priority: "MEDIUM",
-          status: "TODO",
-          dueDate: formatDateTimeLocal(),
-        });
+        setFormData(defaultFormData);
       }
     }
   }, [isOpen, initialData]);
@@ -138,18 +128,21 @@ export function TaskFormModal({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
+            {/* 📌 เปลี่ยนส่วน Category ให้เป็น Select Dropdown (Work / Personal) */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 uppercase mb-1">
-                Category
+                Category *
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.category}
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
-                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+              >
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+              </select>
             </div>
 
             <div>
@@ -181,7 +174,7 @@ export function TaskFormModal({
                 onChange={(e) =>
                   setFormData({ ...formData, priority: e.target.value as any })
                 }
-                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
               >
                 <option value="LOW">LOW</option>
                 <option value="MEDIUM">MEDIUM</option>
@@ -199,7 +192,7 @@ export function TaskFormModal({
                 onChange={(e) =>
                   setFormData({ ...formData, status: e.target.value as any })
                 }
-                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
               >
                 <option value="TODO">TODO</option>
                 <option value="IN_PROGRESS">IN_PROGRESS</option>
